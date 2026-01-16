@@ -24,8 +24,9 @@ npm run dev
 Open:
 - Frontend: http://localhost:5173
 - Backend: http://localhost:8080
-  
-The frontend expects the backend at `http://localhost:8080` by default (see `events-frontend/src/config/api.ts`).
+
+When running locally, the frontend expects the backend at http://localhost:8080.
+When running with Docker, API requests are proxied through /api via Nginx.
 
 ## Folder Structure and Separation of Concerns
 
@@ -58,7 +59,7 @@ The frontend folder structure was designed to make **code navigation intuitive**
 Inside the `src` folder, the application is organized as follows:
 
 - The codebase is componentized, and UI components live in their own directory, grouped into other folders by screen sections and responsibilities.
-- API configuration is centralized in `api.ts`, located in the `config` folder, keeping all server-related configuration is defined in a single place.
+- API configuration is centralized in `api.ts`, located in the `config` folder, keeping all server-related configuration defined in a single place.
 - API calls are encapsulated in the `data/services` folder. The `data` layer currently contains only `services`, but it was designed to scale and could easily include additional subfolders if the application grew.
 - The `domain` folder contains the **core types and concepts** the application revolves around, such as `Event`, `EventStatus`, filter types, and expected service responses.  
   This folder also contains **validators**, responsible for validating user input in forms.
@@ -149,7 +150,7 @@ The **backend**, however, does not rely on the frontend for correctness. It perf
 In summary, frontend validations are primarily focused on usability and interaction feedback, while backend validations are responsible for data integrity, security, and enforcing business rules, so that no invalid state can be stored regardless of the request origin.
 
 ## Performance considerations and state flow
-- Hooks to optimize performance were used, like useMemo and useCallback, avoiding unnecessary rerenders where possible, especially in components that depend on derived data (such as filtered or sorted event lists) or receive callback props.useFilteredEvents() memoizes through useMemo(), so it only rerenders when items/filters change. This is fine for smaller lists like the expected volume for the app. 
+- Hooks to optimize performance were used, like useMemo and useCallback, avoiding unnecessary rerenders where possible, especially in components that depend on derived data (such as filtered or sorted event lists) or receive callback props. useFilteredEvents() memoizes through useMemo(), so it only rerenders when items/filters change. This is fine for smaller lists like the expected volume for the app. 
 - As previously mentioned, if the application were to be deployed to production, filtering, sorting, and pagination should be handled by the backend to ensure optimal performance with larger datasets. This would reduce memory usage and processing on the client, keeping the UI responsive even with more data.
 
 Given the limited scope of the application and the relatively simple data relationships, state is kept close to where it is used, which reduces complexity and improves readability. UI-related state (such as filters, sorting, and search input) is kept local to the components that own the interaction. The `useEvents` hook acts as a local data store, centralizing:
@@ -170,12 +171,14 @@ I use a lot of AI during my workday as a developer, and the same was done during
 
 - brainstorm and prioritize features, helping me to time-block and plan.
 - perform backend code reviews, suggesting types for the Event class, according to market best practices. I'd also never done an in-memory repository, so I used AI to help me understand the structure of how that would go.
-- perform front-end code refactoring, speed up CSS tweaks, generate labels for translated items. I wasn't at all familiar with optimistic updates, and not too clear on memoization, so Chat helped me navigate through implementing these concepts.
+- perform front-end code refactoring, speed up CSS tweaks, generate labels for translated items. I wasn't at all familiar with optimistic updates, and not too clear on memoization, so Chat helped me navigate through implementing these concepts and/or understanding and determining when they were called for.
 - debug - ("Chat, what's wrong with my docker files?", "Chat, guide me through implementing internationalization", "Chat, why am I geting x error when trying to run my tests?").
 - make the README clearer and fix gramatical errors, as well as making the text more fluid.
+
+All final decisions were made by me, with AI suggestions being carefully reviewed and altered when necessary.
   
 ## Tests
-Simple backend and frontend tests were implemented. I chose to focus on the business rules, making sure the backend service validations and frontend form validations were working as expected. I did not have time to code component tests, so I focused on testing them through the actual interface instead, throughout the development process. The rules tested were:
+Simple backend and frontend tests were implemented. I chose to focus on the business rules, making sure the backend service validations and frontend form validations were working as expected. I did not have time to code component tests, so I focused on testing them through the actual interface instead, throughout the development process. If I had more time, I would use React Testing Library and Playwright to write component tests and validate expected workflow. The rules tested were:
 
 - Price cannot equal to or less than zero
 - End date cannot be before start date
@@ -186,4 +189,4 @@ Simple backend and frontend tests were implemented. I chose to focus on the busi
 - Delete flow (backend only)
 - Empty GET (backend only)
 
-  For backend testing, Mockito and JUnit were used. For frontend testing, Vitest was used.
+For backend testing, Mockito and JUnit were used. For frontend testing, Vitest was used.
