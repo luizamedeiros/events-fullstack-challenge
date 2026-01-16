@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import type { EventStatus, SortValue } from '../../domain/entities/event'
-import { eventStatuses, getStatusOptions } from '../../domain/entities/event'
 import TableHeader from './TableHeader'
 
 type TableHeaderProps = {
@@ -10,6 +9,7 @@ type TableHeaderProps = {
   onSortChange: (value: SortValue) => void
   statusFilter: EventStatus | 'ALL'
   onStatusFilterChange: (value: EventStatus | 'ALL') => void
+  statusOptions: Array<{ value: EventStatus; label: string }>
 }
 
 const TableSearchAndFilters = ({
@@ -19,6 +19,7 @@ const TableSearchAndFilters = ({
   onSortChange,
   statusFilter,
   onStatusFilterChange,
+  statusOptions,
 }: TableHeaderProps) => {
   const { t } = useTranslation()
   const sortLabelMap = {
@@ -70,13 +71,9 @@ const TableSearchAndFilters = ({
                 }
               >
                 <option value="ALL">{t('common.all')}</option>
-                {eventStatuses.map((status) => (
-                  <option key={status} value={status}>
-                    {
-                      getStatusOptions(t).find(
-                        (option) => option.value === status
-                      )?.label
-                    }
+                {statusOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
                 ))}
               </select>

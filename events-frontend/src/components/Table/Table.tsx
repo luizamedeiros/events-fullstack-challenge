@@ -1,9 +1,10 @@
 import type { Event, EventStatus, SortValue } from '../../domain/entities/event'
+import { getStatusOptions } from '../../domain/entities/event'
 import TableRow from './TableRow'
 import TableSearchAndFilters from './TableSearchAndFilters'
 import { useTranslation } from 'react-i18next'
 import { useFilteredEvents } from '../../hooks/useFilteredEvents'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 type TableProps = {
   items: Event[]
@@ -24,6 +25,7 @@ const Table = ({
   const [search, setSearch] = useState('')
   const [sortValue, setSortValue] = useState<SortValue>('startDate-asc')
   const [statusFilter, setStatusFilter] = useState<EventStatus | 'ALL'>('ALL')
+  const statusOptions = useMemo(() => getStatusOptions(t), [t])
   const filteredItems = useFilteredEvents({
     items,
     search,
@@ -53,6 +55,7 @@ const Table = ({
         onEdit={onEdit}
         onDelete={onDelete}
         onStatusChange={onStatusChange}
+        statusOptions={statusOptions}
       />
     ))
   }
@@ -67,6 +70,7 @@ const Table = ({
           onSortChange={setSortValue}
           statusFilter={statusFilter}
           onStatusFilterChange={setStatusFilter}
+          statusOptions={statusOptions}
         />
         <tbody>{renderRows()}</tbody>
       </table>

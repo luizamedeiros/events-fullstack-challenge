@@ -1,10 +1,8 @@
 import {
-  getStatusOptions,
   type Event,
   type EventStatus,
 } from '../../domain/entities/event'
 import { formatDate } from '../../utils/date'
-import { useTranslation } from 'react-i18next'
 import { IconButton } from './TableRowButtons'
 
 type TableRowProps = {
@@ -13,6 +11,7 @@ type TableRowProps = {
   onEdit: (event: Event) => void
   onDelete: (event: Event) => void
   onStatusChange: (event: Event, status: EventStatus) => void
+  statusOptions: Array<{ value: EventStatus; label: string }>
 }
 
 const TableRow = ({
@@ -20,10 +19,8 @@ const TableRow = ({
   onEdit,
   onDelete,
   onStatusChange,
+  statusOptions,
 }: TableRowProps) => {
-  const { t } = useTranslation()
-  const statusOptions = getStatusOptions(t)
-
   return (
     <tr>
       <td className="title">
