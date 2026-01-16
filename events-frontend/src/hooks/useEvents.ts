@@ -8,6 +8,7 @@ import type {
   EventStatus,
   EventUpdate,
 } from '../domain/entities/event'
+import { validateEvent } from '../domain/validators/validators'
 import createToast from '../utils/toast'
 import { buildModalSetup, buildModalTryAgainLater } from '../utils/modal'
 
@@ -42,6 +43,7 @@ export function useEvents() {
   const openEventModalForm = useCallback(
     async (initial?: Event) => {
       const modalSetup = buildModalSetup(t)
+      
       const getModalElements = () => {
         const titleInput = document.getElementById(
           'swal-title'
@@ -102,35 +104,23 @@ export function useEvents() {
           const { titleInput, startInput, endInput, priceInput, statusSelect } =
             getModalElements()
 
-          const title = titleInput.value.trim()
-          const startDate = startInput.value
-          const endDate = endInput.value
-          const rawPrice = priceInput.value.replace(',', '.')
-          const price = Number(rawPrice)
-          const status = statusSelect.value as EventStatus
-
-          if (!title || !startDate || !endDate || Number.isNaN(price)) {
-            Swal.showValidationMessage(t('common.validationRequired'))
-            return false
-          }
-
-          if (price < 0) {
-            Swal.showValidationMessage(t('common.validationPricePositive'))
-            return false
-          }
-
-          if (startDate > endDate) {
-            Swal.showValidationMessage(t('common.validationEndAfterStart'))
-            return false
-          }
-
-          return {
-            title,
-            startDate,
-            endDate,
-            price,
-            status,
+          const payload = {
+            title: titleInput.value.trim(),
+            startDate: startInput.value,
+            endDate: endInput.value,
+            price: Number(priceInput.value.replace(',', '.')),
+            status: statusSelect.value as EventStatus,
           } satisfies EventCreate
+
+          const errors = validateEvent(payload)
+          const firstError = Object.values(errors)[0]
+
+          if (firstError) {
+            Swal.showValidationMessage(firstError)
+            return false
+          }
+
+          return payload
         },
       })
 
