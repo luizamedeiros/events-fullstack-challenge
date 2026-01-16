@@ -1,4 +1,21 @@
-## Running the app (TODO)
+## Running the app
+
+In order to get the project up and running on your local machine, clone the repository, navigate to its folder in your terminal, and follow the steps below.
+
+Backend:
+```
+cd events
+./mvnw spring-boot:run
+```
+
+Frontend:
+```
+cd events-frontend
+npm install
+npm run dev
+```
+
+The frontend expects the backend at `http://localhost:8080` by default (see `events-frontend/src/config/api.ts`).
 
 ## Folder Structure and Separation of Concerns
 
