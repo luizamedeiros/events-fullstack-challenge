@@ -48,7 +48,6 @@ body {
 }
 
 .language-toggle select:focus {
-  outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(43, 142, 131, 0.15);
 }
@@ -187,7 +186,6 @@ body {
 
 .control input:focus,
 .control select:focus {
-  outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(43, 142, 131, 0.15);
 }
@@ -203,7 +201,6 @@ body {
 }
 
 .status-select:focus {
-  outline: none;
   box-shadow: 0 0 0 3px rgba(43, 142, 131, 0.15);
 }
 
@@ -315,8 +312,12 @@ button:hover {
     min-width: 0;
   }
 
-  .events-table thead {
+  .events-table thead tr.table-header {
     display: none;
+  }
+
+  .table-controls {
+    grid-template-columns: 1fr;
   }
 
   .events-table tbody tr {
