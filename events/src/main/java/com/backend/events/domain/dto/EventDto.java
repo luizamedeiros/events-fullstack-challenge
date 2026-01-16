@@ -9,6 +9,14 @@ import java.time.LocalDate;
 
 public class EventDto {
 
+    public EventDto (String title, LocalDate startDate, LocalDate endDate, BigDecimal price, String status) {
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.price = price;
+        this.status = status;
+
+    }
     @NotBlank(message = "title is required")
     private String title;
 
