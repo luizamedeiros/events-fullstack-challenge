@@ -19,7 +19,7 @@ const Table = ({
   state,
   onEdit,
   onDelete,
-  onStatusChange
+  onStatusChange,
 }: TableProps) => {
   const { t } = useTranslation()
   const [search, setSearch] = useState('')

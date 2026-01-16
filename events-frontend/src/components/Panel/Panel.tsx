@@ -3,7 +3,6 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
 import { TableStateTag } from '../Table/TableStateTag'
 
-
 interface PanelProps {
   handleCreate: () => void
   state: string

@@ -1,5 +1,9 @@
 import { api } from '../../config/api'
-import type { Event, EventCreate, EventUpdate } from '../../domain/entities/event'
+import type {
+  Event,
+  EventCreate,
+  EventUpdate,
+} from '../../domain/entities/event'
 
 export const eventsService = {
   async list(): Promise<Event[]> {

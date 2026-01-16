@@ -43,7 +43,7 @@ export function useEvents() {
   const openEventModalForm = useCallback(
     async (initial?: Event) => {
       const modalSetup = buildModalSetup(t)
-      
+
       const getModalElements = () => {
         const titleInput = document.getElementById(
           'swal-title'

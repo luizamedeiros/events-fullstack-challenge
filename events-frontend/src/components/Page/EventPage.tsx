@@ -4,15 +4,8 @@ import { Header } from '../Header/Header'
 import { useEvents } from '../../hooks/useEvents'
 
 const EventPage = () => {
-  const {
-    items,
-    state,
-    error,
-    create,
-    edit,
-    remove,
-    updateStatus,
-  } = useEvents()
+  const { items, state, error, create, edit, remove, updateStatus } =
+    useEvents()
 
   return (
     <div className="page">

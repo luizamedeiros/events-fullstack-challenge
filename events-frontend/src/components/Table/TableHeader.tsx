@@ -14,4 +14,4 @@ const TableHeader = () => {
   )
 }
 
-export default TableHeader;
+export default TableHeader

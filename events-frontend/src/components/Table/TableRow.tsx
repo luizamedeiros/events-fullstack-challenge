@@ -1,7 +1,4 @@
-import {
-  type Event,
-  type EventStatus,
-} from '../../domain/entities/event'
+import { type Event, type EventStatus } from '../../domain/entities/event'
 import { formatDate } from '../../utils/date'
 import { IconButton } from './TableRowButtons'
 
@@ -23,9 +20,7 @@ const TableRow = ({
 }: TableRowProps) => {
   return (
     <tr>
-      <td className="title">
-        {event.title}
-      </td>
+      <td className="title">{event.title}</td>
       <td>
         {formatDate(event.startDate)} - {formatDate(event.endDate)}
       </td>
