@@ -171,7 +171,8 @@ I use a lot of AI during my workday as a developer, and the same was done during
 
 - brainstorm and prioritize features, helping me to time-block and plan.
 - perform backend code reviews, suggesting types for the Event class (specifically the id and price attributes), according to market best practices. I'd also never done an in-memory repository, so I used AI to help me understand the structure of how that would go.
-- perform front-end code refactoring, speed up, support, and suggest CSS tweaks, generate labels for translated items. I wasn't at all familiar with optimistic updates, and not too clear on memoization, so Chat helped me navigate through implementing these concepts and/or understanding and determining when they were called for. I'd also never done internationalization, so AI guided me through implementing that. 
+- perform front-end code refactoring, speed up, support, and suggest CSS tweaks, generate labels for translated items. I wasn't at all familiar with optimistic updates, and not too clear on memoization, so Chat helped me navigate through implementing these concepts and/or understanding and determining when they were called for. I'd also never done internationalization, so AI guided me through implementing that.
+- TypeScript type suggestions - I don't use much TypeScript in my daily work, and it had been a while since I'd used it at all. AI helped me infer and establish interfaces and types. 
 - debug - ("Chat, what's wrong with my docker files?", "Chat, guide me through implementing internationalization", "Chat, why am I geting x error when trying to run my tests?")
 - suggesting refactors and general code review.
 - make the README clearer and fix gramatical errors, as well as making the text more fluid.
