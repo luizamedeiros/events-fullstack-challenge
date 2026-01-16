@@ -1,4 +1,4 @@
-import type { EventCreate } from './entities/event'
+import type { EventCreate } from "../entities/event"
 
 export function validateEvent(input: EventCreate): Record<string, string> {
   const errors: Record<string, string> = {}
