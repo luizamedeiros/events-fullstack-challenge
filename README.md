@@ -4,8 +4,7 @@ In order to get the project up and running on your local machine, clone the repo
 
 ### Option 1 - With Docker
 ```
-cd events
-./mvnw spring-boot:run
+docker compose up --build
 ```
 
 ### Option 2 - Local dev
@@ -101,12 +100,6 @@ The use of translation files to define labels per language makes it straightforw
 
 ---
 
-### Vitest
-
-Vitest was chosen as the testing framework for the frontend due to its fast execution and simplicity.
-
----
-
 ### Font Awesome
 
 Font Awesome was used to provide clear and consistent icons throughout the interface, keeping a clean and intuitive interface.
@@ -142,7 +135,6 @@ If more entities were added (like Users, Roles, Tickets), the same architectural
 - Keep shared concerns (formatters, modal/toast helpers, internationalization) centralized in `utils` and `config`.
 - Keep controllers, services, and repositories entity-specific, avoiding unnecessary coupling or overlaps.
 - Create more CSS variables in order to make it easier to keep visual coherence throughtout the interface.
-- Dockerize the application.  (TODO)
 
 This approach keeps the codebase consistent, maintainable, and developer-friendly as complexity grows.
 
@@ -156,7 +148,42 @@ The **backend**, however, does not rely on the frontend for correctness. It perf
 
 In summary, frontend validations are primarily focused on usability and interaction feedback, while backend validations are responsible for data integrity, security, and enforcing business rules, so that no invalid state can be stored regardless of the request origin.
 
+## Performance considerations and state flow
+- Hooks to optimize performance were used, like useMemo and useCallback, avoiding unnecessary rerenders where possible, especially in components that depend on derived data (such as filtered or sorted event lists) or receive callback props.useFilteredEvents() memoizes through useMemo(), so it only rerenders when items/filters change. This is fine for smaller lists like the expected volume for the app. 
+- As previously mentioned, if the application were to be deployed to production, filtering, sorting, and pagination should be handled by the backend to ensure optimal performance with larger datasets. This would reduce memory usage and processing on the client, keeping the UI responsive even with more data.
 
-## AI Usage (TODO)
-## Tests (TODO)
-## Performance considerations and state flow (TODO)
+Given the limited scope of the application and the relatively simple data relationships, state is kept close to where it is used, which reduces complexity and improves readability. UI-related state (such as filters, sorting, and search input) is kept local to the components that own the interaction. The `useEvents` hook acts as a local data store, centralizing:
+- the list of events
+- loading and error states
+- all service actions (create, edit, update status, delete)
+
+To summarize the state flow:
+- The application starts in `main.tsx`, rendering `EventPage`.
+- `EventPage` invokes the `useEvents` hook, which is responsible for fetching data, managing state, and exposing handlers for CRUD operations.
+- `useEvents` performs the initial data load using `useEffect`, calling the service layer and storing the result in local state.
+- UI components such as `Panel` and `Table` consume the state and handlers provided by `useEvents`, remaining mostly presentational.
+- `Table` manages UI-specific state (search text, sorting, and filters) and derives the visible list of events through the `useFilteredEvents` hook.
+- All server actions are handled through optimistic updates, immediately updating the UI before the backend response is received. If an operation fails, a rollback is applied.
+
+## AI Usage
+I use a lot of AI during my workday as a developer, and the same was done during the coding of this challenge. ChatGPT was used from start to finish, in order to speed along development. When using AI to work through new/unclear/unknown concepts, I focus on using AI to correctly implement such concepts, but always focusing on also having AI explain the code and concepts to me, helping me learn and understand, instead of just focusing on a copy/paste approach.
+
+- brainstorm and prioritize features, helping me to time-block and plan.
+- perform backend code reviews, suggesting types for the Event class, according to market best practices. I'd also never done an in-memory repository, so I used AI to help me understand the structure of how that would go.
+- perform front-end code refactoring, speed up CSS tweaks, generate labels for translated items. I wasn't at all familiar with optimistic updates, and not too clear on memoization, so Chat helped me navigate through implementing these concepts.
+- debug - ("Chat, what's wrong with my docker files?", "Chat, guide me through implementing internationalization", "Chat, why am I geting x error when trying to run my tests?").
+- make the README clearer and fix gramatical errors, as well as making the text more fluid.
+  
+## Tests
+Simple backend and frontend tests were implemented. I chose to focus on the business rules, making sure the backend service validations and frontend form validations were working as expected. I did not have time to code component tests, so I focused on testing them through the actual interface instead, throughout the development process. The rules tested were:
+
+- Price cannot equal to or less than zero
+- End date cannot be before start date
+- No null or empty fields
+- No invalid statuses.
+- One generic happy path.
+- Edit flow (backend only)
+- Delete flow (backend only)
+- Empty GET (backend only)
+
+  For backend testing, Mockito and JUnit were used. For frontend testing, Vitest was used.
