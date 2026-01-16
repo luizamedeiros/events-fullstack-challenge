@@ -24,8 +24,8 @@ export function validateEvent(input: EventCreate): Record<string, string> {
       errors.startDate = i18n.t('common.validationInvalidDate')
       errors.endDate = i18n.t('common.validationInvalidDate')
     }
-    const s = new Date(input.startDate).getDate()
-    const e = new Date(input.endDate).getDate()
+    const s = new Date(input.startDate).getTime()
+    const e = new Date(input.endDate).getTime()
     if (!(e > s)) errors.endDate = i18n.t('common.validationEndAfterStart')
   }
 
