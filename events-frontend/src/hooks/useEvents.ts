@@ -1,6 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
+import Swal from 'sweetalert2'
+import { useTranslation } from 'react-i18next'
 import { eventsService } from '../data/services/service'
-import type { Event, EventCreate, EventUpdate } from '../domain/entities/event'
+import type {
+  Event,
+  EventCreate,
+  EventStatus,
+  EventUpdate,
+} from '../domain/entities/event'
+import createToast from '../utils/toast'
+import { buildModalSetup, buildModalTryAgainLater } from '../utils/modal'
 
 type LoadState = 'idle' | 'loading' | 'error'
 
@@ -8,6 +17,7 @@ export function useEvents() {
   const [items, setItems] = useState<Event[]>([])
   const [state, setState] = useState<LoadState>('idle')
   const [error, setError] = useState<string | null>(null)
+  const { t } = useTranslation()
 
   const refresh = useCallback(async () => {
     setState('loading')
@@ -23,28 +33,134 @@ export function useEvents() {
   }, [])
 
   useEffect(() => {
-    function initRefresh(){
+    function initRefresh() {
       refresh()
     }
     initRefresh()
   }, [refresh])
 
-  const create = useCallback(async (payload: EventCreate) => {
-    const tempId = -Math.floor(Math.random() * 1000000)
-    const optimistic: Event = { id: tempId, ...payload }
-    setItems((prev) => [optimistic, ...prev])
+  const openEventModalForm = useCallback(
+    async (initial?: Event) => {
+      const modalSetup = buildModalSetup(t)
+      const getModalElements = () => {
+        const titleInput = document.getElementById(
+          'swal-title'
+        ) as HTMLInputElement
+        const startInput = document.getElementById(
+          'swal-start'
+        ) as HTMLInputElement
+        const endInput = document.getElementById('swal-end') as HTMLInputElement
+        const priceInput = document.getElementById(
+          'swal-price'
+        ) as HTMLInputElement
+        const statusSelect = document.getElementById(
+          'swal-status'
+        ) as HTMLSelectElement
 
+        return {
+          titleInput,
+          startInput,
+          endInput,
+          priceInput,
+          statusSelect,
+        }
+      }
+
+      const { value } = await Swal.fire({
+        title: initial ? t('common.modalEditEvent') : t('common.modalNewEvent'),
+        html: modalSetup,
+        showCancelButton: true,
+        showCloseButton: true,
+        confirmButtonText: initial
+          ? t('common.modalSave')
+          : t('common.modalCreate'),
+        cancelButtonText: t('common.cancel'),
+        focusConfirm: false,
+        buttonsStyling: false,
+        customClass: {
+          popup: 'swal-popup',
+          title: 'swal-title',
+          htmlContainer: 'swal-html',
+          confirmButton: 'btn primary',
+          cancelButton: 'btn ghost',
+        },
+        didOpen: () => {
+          const { titleInput, startInput, endInput, priceInput, statusSelect } =
+            getModalElements()
+
+          if (initial) {
+            titleInput.value = initial.title
+            startInput.value = initial.startDate
+            endInput.value = initial.endDate
+            priceInput.value = String(initial.price)
+            statusSelect.value = initial.status
+          } else {
+            statusSelect.value = 'STARTED'
+          }
+        },
+        preConfirm: () => {
+          const { titleInput, startInput, endInput, priceInput, statusSelect } =
+            getModalElements()
+
+          const title = titleInput.value.trim()
+          const startDate = startInput.value
+          const endDate = endInput.value
+          const rawPrice = priceInput.value.replace(',', '.')
+          const price = Number(rawPrice)
+          const status = statusSelect.value as EventStatus
+
+          if (!title || !startDate || !endDate || Number.isNaN(price)) {
+            Swal.showValidationMessage(t('common.validationRequired'))
+            return false
+          }
+
+          if (price < 0) {
+            Swal.showValidationMessage(t('common.validationPricePositive'))
+            return false
+          }
+
+          if (startDate > endDate) {
+            Swal.showValidationMessage(t('common.validationEndAfterStart'))
+            return false
+          }
+
+          return {
+            title,
+            startDate,
+            endDate,
+            price,
+            status,
+          } satisfies EventCreate
+        },
+      })
+
+      return value as EventCreate | undefined
+    },
+    [t]
+  )
+
+  const create = useCallback(async () => {
+    const payload = await openEventModalForm()
+    if (!payload) return
+    let tempId: number | null = null
     try {
+      tempId = -Math.floor(Math.random() * 1000000)
+      const optimistic: Event = { id: tempId, ...payload }
+      setItems((prev) => [optimistic, ...prev])
+
       const saved = await eventsService.create(payload)
       setItems((prev) => prev.map((e) => (e.id === tempId ? saved : e)))
-      return saved
-    } catch (e) {
-      setItems((prev) => prev.filter((e2) => e2.id !== tempId))
-      throw e
+      createToast(t('common.toastEventCreated'))
+    } catch {
+      if (tempId != null) {
+        setItems((prev) => prev.filter((e2) => e2.id !== tempId))
+      }
+      const modalError = buildModalTryAgainLater(t)
+      await Swal.fire(modalError)
     }
-  }, [])
+  }, [openEventModalForm, t])
 
-  const update = useCallback(async (id: number, payload: EventUpdate) => {
+  const updateEvent = useCallback(async (id: number, payload: EventUpdate) => {
     let before: Event | undefined
     setItems((prev) => {
       before = prev.find((e) => e.id === id)
@@ -62,20 +178,84 @@ export function useEvents() {
     }
   }, [])
 
-  const remove = useCallback(async (id: number) => {
-    let removedItem: Event | undefined
-    setItems((prev) => {
-      removedItem = prev.find((e) => e.id === id)
-      return prev.filter((e) => e.id !== id)
-    })
+  const edit = useCallback(
+    async (event: Event) => {
+      const payload = await openEventModalForm(event)
+      if (!payload) return
+      try {
+        await updateEvent(event.id, payload)
+        createToast(t('common.toastEventUpdated'))
+      } catch {
+        const modalError = buildModalTryAgainLater(t)
+        await Swal.fire(modalError)
+      }
+    },
+    [openEventModalForm, t, updateEvent]
+  )
 
-    try {
-      await eventsService.remove(id)
-    } catch (e) {
-      if (removedItem) setItems((prev) => [removedItem!, ...prev])
-      throw e
-    }
-  }, [])
+  const updateStatus = useCallback(
+    async (event: Event, status: EventStatus) => {
+      if (event.status === status) return
+      try {
+        await updateEvent(event.id, { ...event, status })
+        createToast(t('common.toastEventStatusUpdated'))
+      } catch {
+        const modalError = buildModalTryAgainLater(t)
+        await Swal.fire(modalError)
+      }
+    },
+    [t, updateEvent]
+  )
 
-  return { items, state, error, refresh, create, update, remove }
+  const remove = useCallback(
+    async (event: Event) => {
+      const result = await Swal.fire({
+        icon: 'warning',
+        title: t('common.confirmDeleteTitle'),
+        text: t('common.confirmDelete', { name: event.title }),
+        showCancelButton: true,
+        confirmButtonText: t('common.confirm'),
+        cancelButtonText: t('common.cancel'),
+        buttonsStyling: false,
+        customClass: {
+          popup: 'swal-popup',
+          title: 'swal-title-alert',
+          confirmButton: 'btn danger',
+          cancelButton: 'btn ghost',
+        },
+      })
+
+      if (!result.isConfirmed) return
+
+      let removedItem: Event | undefined
+      try {
+        setItems((prev) => {
+          removedItem = prev.find((e) => e.id === event.id)
+          return prev.filter((e) => e.id !== event.id)
+        })
+
+        await eventsService.remove(event.id)
+        createToast(t('common.toastEventDeleted'))
+      } catch {
+        setItems((prev) => {
+          if (!removedItem) return prev
+          return [removedItem, ...prev]
+        })
+        const modalError = buildModalTryAgainLater(t)
+        await Swal.fire(modalError)
+      }
+    },
+    [t]
+  )
+
+  return {
+    items,
+    state,
+    error,
+    refresh,
+    create,
+    edit,
+    remove,
+    updateStatus,
+  }
 }
