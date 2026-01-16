@@ -142,7 +142,6 @@ If more entities were added (like Users, Roles, Tickets), the same architectural
 - Keep shared concerns (formatters, modal/toast helpers, internationalization) centralized in `utils` and `config`.
 - Keep controllers, services, and repositories entity-specific, avoiding unnecessary coupling or overlaps.
 - Create more CSS variables in order to make it easier to keep visual coherence throughtout the interface.
-- Dockerize the application.  (TODO)
 
 This approach keeps the codebase consistent, maintainable, and developer-friendly as complexity grows.
 
@@ -156,7 +155,33 @@ The **backend**, however, does not rely on the frontend for correctness. It perf
 
 In summary, frontend validations are primarily focused on usability and interaction feedback, while backend validations are responsible for data integrity, security, and enforcing business rules, so that no invalid state can be stored regardless of the request origin.
 
+## Performance considerations and state flow
+- Hooks to optimize performance were used, like useMemo and useCallback, avoiding unnecessary rerenders where possible, especially in components that depend on derived data (such as filtered or sorted event lists) or receive callback props.useFilteredEvents() memoizes through useMemo(), so it only rerenders when items/filters change. This is fine for smaller lists like the expected volume for the app. 
+- As previously mentioned, if the application were to be deployed to production, filtering, sorting, and pagination should be handled by the backend to ensure optimal performance with larger datasets. This would reduce memory usage and processing on the client, keeping the UI responsive even with more data.
 
-## AI Usage (TODO)
+Given the limited scope of the application and the relatively simple data relationships, state is kept close to where it is used, which reduces complexity and improves readability. UI-related state (such as filters, sorting, and search input) is kept local to the components that own the interaction. The `useEvents` hook acts as a local data store, centralizing:
+- the list of events
+- loading and error states
+- all service actions (create, edit, update status, delete)
+
+To summarize the state flow:
+- The application starts in `main.tsx`, rendering `EventPage`.
+- `EventPage` invokes the `useEvents` hook, which is responsible for fetching data, managing state, and exposing handlers for CRUD operations.
+- `useEvents` performs the initial data load using `useEffect`, calling the service layer and storing the result in local state.
+- UI components such as `Panel` and `Table` consume the state and handlers provided by `useEvents`, remaining mostly presentational.
+- `Table` manages UI-specific state (search text, sorting, and filters) and derives the visible list of events through the `useFilteredEvents` hook.
+- All server actions are handled through optimistic updates, immediately updating the UI before the backend response is received. If an operation fails, a rollback is applied.
+
+  
+
+## AI Usage (WIP)
+I use a lot of AI during my workday as a developer, and the same was done during the coding of this challenge. ChatGPT was used from start to finish, in order to speed along development.
+
+- brainstorm and prioritize features, helping me to time-block and plan.
+- perform backend code reviews, suggesting types for the Event class, according to market best practices. I'd also never done an in-memory repository, so I used AI to help me understand the structure of how that would go.
+- perform front-end code refactoring, speed up CSS tweaks, generate labels for translated items.
+- debug - ("Chat, what's wrong with my docker files?", "Chat, guide me through implementing internationalization", "Chat, why am I geting x error when trying to run my tests?")
+  
+
+  
 ## Tests (TODO)
-## Performance considerations and state flow (TODO)
