@@ -171,8 +171,6 @@ To summarize the state flow:
 - `Table` manages UI-specific state (search text, sorting, and filters) and derives the visible list of events through the `useFilteredEvents` hook.
 - All server actions are handled through optimistic updates, immediately updating the UI before the backend response is received. If an operation fails, a rollback is applied.
 
-  
-
 ## AI Usage
 I use a lot of AI during my workday as a developer, and the same was done during the coding of this challenge. ChatGPT was used from start to finish, in order to speed along development. When using AI to work through new/unclear/unknown concepts, I focus on using AI to correctly implement such concepts, but always focusing on also having AI explain the code and concepts to me, helping me learn and understand, instead of just focusing on a copy/paste approach.
 
@@ -182,6 +180,10 @@ I use a lot of AI during my workday as a developer, and the same was done during
 - debug - ("Chat, what's wrong with my docker files?", "Chat, guide me through implementing internationalization", "Chat, why am I geting x error when trying to run my tests?").
 - make the README clearer and fix gramatical errors, as well as making the text more fluid.
   
+## Tests
+Simple backend and frontend tests were implemented. I chose to focus on the business rules, making sure the backend service validations and frontend form validations were working as expected. I did not have time to code component tests, so I focused on testing them through the actual interface instead, throughout the development process. The rules tested were:
 
-  
-## Tests (TODO)
+- Price cannot equal to or less than zero
+- End date cannot be before start date
+- No null or empty fields
+- No invalid statuses.
