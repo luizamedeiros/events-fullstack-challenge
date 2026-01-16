@@ -1,4 +1,4 @@
-# Architecture & Engineering Constraints
+## Running the app (TODO)
 
 ## Folder Structure and Separation of Concerns
 
@@ -106,13 +106,15 @@ If more features were added, the next steps would be:
 
 ### Scaling with More Entities/Possible Next Steps
 
-If more entities were added (like Users, Roles, Tickets), the same architectural pattern would be applied consistently:
+If more entities were added (like Users, Roles, Tickets), the same architectural pattern could be applied consistently:
 
 - Add entity types and validation rules in the `domain` folder.
 - Add new service modules under `data/services` (e.g., `venues.service.ts`, `users.service.ts`).
 - Create reusable UI components and entity-specific hooks following the same structure already used for events.
 - Keep shared concerns (formatters, modal/toast helpers, internationalization) centralized in `utils` and `config`.
 - Keep controllers, services, and repositories entity-specific, avoiding unnecessary coupling or overlaps.
+- Create more CSS variables in order to make it easier to keep visual coherence throughtout the interface.
+- Dockerize the application.  (TODO)
 
 This approach keeps the codebase consistent, maintainable, and developer-friendly as complexity grows.
 
@@ -127,6 +129,6 @@ The **backend**, however, does not rely on the frontend for correctness. It perf
 In summary, frontend validations are primarily focused on usability and interaction feedback, while backend validations are responsible for data integrity, security, and enforcing business rules, so that no invalid state can be stored regardless of the request origin.
 
 
-### AI Usage
-### Tests
-### Performance considerations and state flow
+## AI Usage (TODO)
+## Tests (TODO)
+## Performance considerations and state flow (TODO)
