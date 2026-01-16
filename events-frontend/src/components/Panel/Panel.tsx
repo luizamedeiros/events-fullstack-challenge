@@ -1,15 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { TableStateTag } from '../Table/TableStateTag'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { useTranslation } from 'react-i18next'
+import { TableStateTag } from '../Table/TableStateTag'
+
 
 interface PanelProps {
   handleCreate: () => void
-  t: (key: string) => string
   state: string
   error: string | null
 }
 
-export const Panel = ({ handleCreate, t, state, error }: PanelProps) => {
+export const Panel = ({ handleCreate, state, error }: PanelProps) => {
+  const { t } = useTranslation()
   return (
     <div className="panel-header">
       <div className="panel-header-row">
@@ -19,7 +21,7 @@ export const Panel = ({ handleCreate, t, state, error }: PanelProps) => {
           {t('common.newEvent')}
         </button>
       </div>
-      <TableStateTag state={state} error={error} t={t} />
+      <TableStateTag state={state} error={error} />
     </div>
   )
 }

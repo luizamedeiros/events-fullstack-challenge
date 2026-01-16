@@ -1,6 +1,7 @@
-import { eventStatuses } from '../../domain/event'
+import type { SweetAlertOptions } from 'sweetalert2'
+import { eventStatuses } from '../domain/entities/event'
 
-export const BuildModalSetup = (t: (key: string) => string) => {
+export const buildModalSetup = (t: (key: string) => string) => {
   const statusLabels: Record<string, string> = {
     STARTED: t('common.statusStarted'),
     PAUSED: t('common.statusPaused'),
@@ -45,3 +46,17 @@ export const BuildModalSetup = (t: (key: string) => string) => {
         </div>
       `
 }
+
+export const buildModalTryAgainLater = (
+  t: (key: string) => string
+): SweetAlertOptions => ({
+  icon: 'error',
+  title: t('common.modalTryAgainLaterTitle'),
+  text: t('common.modalTryAgainLaterText'),
+  buttonsStyling: false,
+  customClass: {
+    popup: 'swal-popup',
+    title: 'swal-title-alert',
+    confirmButton: 'btn primary',
+  },
+})

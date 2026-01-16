@@ -1,7 +1,6 @@
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { EventStatus, SortValue } from '../../domain/event'
-import { eventStatuses, getStatusOptions } from '../../domain/event'
+import type { EventStatus, SortValue } from '../../domain/entities/event'
+import { eventStatuses, getStatusOptions } from '../../domain/entities/event'
 
 type TableHeaderProps = {
   search: string
@@ -21,17 +20,14 @@ const TableSearchAndFilters = ({
   onStatusFilterChange,
 }: TableHeaderProps) => {
   const { t } = useTranslation()
-  const sortLabelMap = useMemo(
-    () => ({
-      'startDate-asc': t('common.sortDateAsc'),
-      'startDate-desc': t('common.sortDateDesc'),
-      'title-asc': t('common.sortTitleAsc'),
-      'title-desc': t('common.sortTitleDesc'),
-      'price-asc': t('common.sortPriceAsc'),
-      'price-desc': t('common.sortPriceDesc'),
-    }),
-    [t]
-  )
+  const sortLabelMap = {
+    'startDate-asc': t('common.sortDateAsc'),
+    'startDate-desc': t('common.sortDateDesc'),
+    'title-asc': t('common.sortTitleAsc'),
+    'title-desc': t('common.sortTitleDesc'),
+    'price-asc': t('common.sortPriceAsc'),
+    'price-desc': t('common.sortPriceDesc'),
+  }
 
   return (
     <thead>

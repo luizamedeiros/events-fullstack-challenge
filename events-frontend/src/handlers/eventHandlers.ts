@@ -4,10 +4,9 @@ import type {
   EventCreate,
   EventStatus,
   EventUpdate,
-} from '../domain/event'
-import { BuildModalSetup } from '../Components/Modal/ModalHtml'
-import { ModalTryAgainLater } from '../Components/Modal/ModalTryAgainLater'
-import Toast from '../Components/Toast/Toast'
+} from '../domain/entities/event'
+import createToast from '../utils/toast'
+import { buildModalSetup, buildModalTryAgainLater } from '../utils/modal'
 
 type HandlersDeps = {
   create: (payload: EventCreate) => Promise<Event>
@@ -18,7 +17,7 @@ type HandlersDeps = {
 type Translator = (key: string, options?: Record<string, string>) => string
 
 const openEventModalForm = async (t: Translator, initial?: Event) => {
-  const modalSetup = BuildModalSetup(t)
+  const modalSetup = buildModalSetup(t)
 
   const { value } = await Swal.fire({
     title: initial ? t('common.modalEditEvent') : t('common.modalNewEvent'),
@@ -116,9 +115,9 @@ export const createEventHandlers = (
     if (!payload) return
     try {
       await create(payload)
-      Toast(t('common.toastEventCreated'))
+      createToast(t('common.toastEventCreated'))
     } catch {
-      const modalError = ModalTryAgainLater(t)
+      const modalError = buildModalTryAgainLater(t)
       await Swal.fire(modalError)
     }
   }
@@ -128,9 +127,9 @@ export const createEventHandlers = (
     if (!payload) return
     try {
       await update(event.id, payload)
-      Toast(t('common.toastEventUpdated'))
+      createToast(t('common.toastEventUpdated'))
     } catch {
-      const modalError = ModalTryAgainLater(t)
+      const modalError = buildModalTryAgainLater(t)
       await Swal.fire(modalError)
     }
   }
@@ -156,9 +155,9 @@ export const createEventHandlers = (
 
     try {
       await remove(event.id)
-      Toast(t('common.toastEventDeleted'))
+      createToast(t('common.toastEventDeleted'))
     } catch {
-      const modalError = ModalTryAgainLater(t)
+      const modalError = buildModalTryAgainLater(t)
       await Swal.fire(modalError)
     }
   }
@@ -167,9 +166,9 @@ export const createEventHandlers = (
     if (event.status === status) return
     try {
       await update(event.id, { ...event, status })
-      Toast(t('common.toastEventStatusUpdated'))
+      createToast(t('common.toastEventStatusUpdated'))
     } catch {
-      const modalError = ModalTryAgainLater(t)
+      const modalError = buildModalTryAgainLater(t)
       await Swal.fire(modalError)
     }
   }

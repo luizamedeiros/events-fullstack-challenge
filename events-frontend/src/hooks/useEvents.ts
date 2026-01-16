@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
-import { eventsService } from '../api/service'
-import type { Event, EventCreate, EventUpdate } from '../domain/event'
+import { eventsService } from '../data/services/service'
+import type { Event, EventCreate, EventUpdate } from '../domain/entities/event'
 
 type LoadState = 'idle' | 'loading' | 'error'
 
 export function useEvents() {
   const [items, setItems] = useState<Event[]>([])
   const [state, setState] = useState<LoadState>('idle')
-  const [error, setError] = useState<any>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
     setState('loading')
@@ -17,17 +17,20 @@ export function useEvents() {
       setItems(data)
       setState('idle')
     } catch (e) {
-      setError(e)
+      setError(String(e))
       setState('error')
     }
   }, [])
 
   useEffect(() => {
-    refresh()
+    function initRefresh(){
+      refresh()
+    }
+    initRefresh()
   }, [refresh])
 
   const create = useCallback(async (payload: EventCreate) => {
-    const tempId = -Math.floor(Math.random() * 1_000_000)
+    const tempId = -Math.floor(Math.random() * 1000000)
     const optimistic: Event = { id: tempId, ...payload }
     setItems((prev) => [optimistic, ...prev])
 

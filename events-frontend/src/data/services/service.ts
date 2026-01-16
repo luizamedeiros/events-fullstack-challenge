@@ -1,29 +1,29 @@
-import { http } from './http'
-import type { Event, EventCreate, EventUpdate } from '../domain/event'
+import { api } from '../../config/api'
+import type { Event, EventCreate, EventUpdate } from '../../domain/entities/event'
 
 export const eventsService = {
   async list(): Promise<Event[]> {
-    const res = await http.get('/events')
+    const res = await api.get('/events')
     return res.data
   },
 
   async get(id: number): Promise<Event> {
-    const res = await http.get(`/events/${id}`)
+    const res = await api.get(`/events/${id}`)
     return res.data
   },
 
   async create(payload: EventCreate): Promise<Event> {
-    const res = await http.post('/events', payload)
+    const res = await api.post('/events', payload)
     return res.data
   },
 
   async edit(id: number, payload: EventUpdate): Promise<Event> {
-    const res = await http.put(`/events/${id}`, payload)
+    const res = await api.put(`/events/${id}`, payload)
     return res.data
   },
 
   async delete(id: number): Promise<void> {
-    await http.delete(`/events/${id}`)
+    await api.delete(`/events/${id}`)
   },
 
   async update(id: number, payload: EventUpdate): Promise<Event> {

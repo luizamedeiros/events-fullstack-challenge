@@ -1,10 +1,12 @@
+import { useTranslation } from 'react-i18next'
+
 interface TableStateTagProps {
   state: string
   error: string | null
-  t: (key: string) => string
 }
 
-export const TableStateTag = ({ state, error, t }: TableStateTagProps) => {
+export const TableStateTag = ({ state, error }: TableStateTagProps) => {
+  const { t } = useTranslation()
   return (
     <div className="panel-meta">
       {state === 'loading' && (

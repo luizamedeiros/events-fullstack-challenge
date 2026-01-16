@@ -2,12 +2,11 @@ import {
   getStatusOptions,
   type Event,
   type EventStatus,
-} from '../../domain/event'
-import { formatDate } from '../../helpers/helpers'
+} from '../../domain/entities/event'
+import { formatDate } from '../../utils/date'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencil, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
-import { useMemo } from 'react'
 
 type TableRowProps = {
   event: Event
@@ -24,7 +23,7 @@ const TableRow = ({
   onStatusChange,
 }: TableRowProps) => {
   const { t } = useTranslation()
-  const statusOptions = useMemo(() => getStatusOptions(t), [t])
+  const statusOptions = getStatusOptions(t)
 
   return (
     <tr>
