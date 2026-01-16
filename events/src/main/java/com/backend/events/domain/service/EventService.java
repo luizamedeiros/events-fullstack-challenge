@@ -81,10 +81,12 @@ public class EventService {
 
     private boolean hasNullFields(EventDto eventDto) {
         return eventDto.getTitle() == null ||
+                eventDto.getTitle().trim().isBlank() ||
                 eventDto.getStartDate() == null ||
                 eventDto.getEndDate() == null ||
                 eventDto.getPrice() == null ||
-                eventDto.getStatus() == null;
+                eventDto.getStatus() == null ||
+                eventDto.getStatus().isBlank();
     }
 
     private boolean isValidPriceValue(BigDecimal price) {
