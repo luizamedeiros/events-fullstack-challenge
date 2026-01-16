@@ -4,9 +4,8 @@ import {
   type EventStatus,
 } from '../../domain/entities/event'
 import { formatDate } from '../../utils/date'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencil, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
+import { IconButton } from './TableRowButtons'
 
 type TableRowProps = {
   event: Event
@@ -48,20 +47,8 @@ const TableRow = ({
         </select>
       </td>
       <td className="actions">
-        <button
-          className="icon-button"
-          onClick={() => onEdit(event)}
-          aria-label={`Edit ${event.title}`}
-        >
-          <FontAwesomeIcon icon={faPencil} />
-        </button>
-        <button
-          className="icon-button danger"
-          onClick={() => onDelete(event)}
-          aria-label={`Cancel ${event.title}`}
-        >
-          <FontAwesomeIcon icon={faTrash} />
-        </button>
+        <IconButton event={event} onEdit={onEdit} />
+        <IconButton event={event} onDelete={onDelete} />
       </td>
     </tr>
   )
