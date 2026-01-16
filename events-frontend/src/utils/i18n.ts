@@ -54,6 +54,7 @@ i18n.use(initReactI18next).init({
           modalTryAgainLaterTitle: 'Sua solicitação não pôde ser concluída',
           modalTryAgainLaterText:
             'Nenhuma alteração foi feita. Por favor, tente novamente mais tarde.',
+          validationInvalidDate: 'Por favor, insira uma data válida.',
         },
       },
     },
@@ -103,7 +104,9 @@ i18n.use(initReactI18next).init({
           toastEventStatusUpdated: 'Event status updated successfully!',
           toastEventDeleted: 'Event deleted successfully!',
           modalTryAgainLaterTitle: 'Your request could not be completed',
-          modalTryAgainLaterText: 'No changes were made. Please try again later.',
+          modalTryAgainLaterText:
+            'No changes were made. Please try again later.',
+          validationInvalidDate: 'Please enter a valid date.',
         },
       },
     },
@@ -154,8 +157,8 @@ i18n.use(initReactI18next).init({
           toastEventStatusUpdated: 'סטטוס האירוע עודכן בהצלחה!',
           toastEventDeleted: 'האירוע נמחק בהצלחה!',
           modalTryAgainLaterTitle: 'לא ניתן להשלים את הבקשה שלך',
-          modalTryAgainLaterText:
-            'לא נעשו שינויים. אנא נסה שוב מאוחר יותר.',
+          modalTryAgainLaterText: 'לא נעשו שינויים. אנא נסה שוב מאוחר יותר.',
+          validationInvalidDate: 'אנא הזן תאריך חוקי.',
         },
       },
     },
