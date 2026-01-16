@@ -143,9 +143,9 @@ This approach keeps the codebase consistent, maintainable, and developer-friendl
 
 Both the frontend and backend perform data validation throughout the application workflow, each with their own responsibilities.
 
-The **frontend** is responsible for validating user input in order to keep the application user-friendly and provide immediate feedback during interactions. This includes validating required fields, date ranges, and basic business rules before submitting any request. By doing so, the frontend prevents unnecessary network calls and improves the overall user experience by guiding the user while filling out forms. 
+The frontend is responsible for validating user input in order to keep the application user-friendly and provide immediate feedback during interactions. This includes validating required fields, date ranges, and basic business rules before submitting any request. By doing so, the frontend prevents unnecessary network calls and improves the overall user experience by guiding the user while filling out forms. 
 
-The **backend**, however, does not rely on the frontend for correctness. It performs its own validations to protect the system and enforce business rules consistently. This ensures that invalid data cannot be persisted, even if requests are made bypassing the UI entirely. Any request that violates domain rules is rejected at the service layer through explicit validations and exceptions.
+The backend, however, does not rely solely on the frontend for correctness. It performs its own validations to protect the system and enforce business rules consistently. This ensures that invalid data cannot be persisted, even if requests are made bypassing the UI entirely. Any request that violates domain rules is rejected at the service layer through explicit validations and exceptions.
 
 In summary, frontend validations are primarily focused on usability and interaction feedback, while backend validations are responsible for data integrity, security, and enforcing business rules, so that no invalid state can be stored regardless of the request origin.
 
@@ -179,7 +179,7 @@ I use a lot of AI during my workday as a developer, and the same was done during
 All final decisions were made by me, with AI suggestions being carefully reviewed and altered when necessary.
   
 ## Tests
-Simple backend and frontend tests were implemented. I chose to focus on the business rules, making sure the backend service validations and frontend form validations were working as expected. I did not have time to code component tests, so I focused on testing them through the actual interface instead, throughout the development process. If I had more time, I would use React Testing Library and Playwright to write component tests and validate expected workflow. The rules tested were:
+Simple backend and frontend tests were implemented. I chose to focus on the business rules, making sure the backend service validations and frontend form validations were working as expected. I did not have time to code component tests, so I focused on testing them through the actual interface instead, throughout the development process. If I had more time, I would use React Testing Library and Playwright to write component tests and validate expected workflow. I would also plan more tests and validations for the backend, in order to better protect against some errors. The rules tested were:
 
 - Price cannot equal to or less than zero.
 - End date cannot be before start date.
