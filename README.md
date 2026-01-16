@@ -170,9 +170,10 @@ To summarize the state flow:
 I use a lot of AI during my workday as a developer, and the same was done during the coding of this challenge. ChatGPT was used from start to finish, in order to speed along development. When using AI to work through new/unclear/unknown concepts, I focus on using AI to correctly implement such concepts, but always focusing on also having AI explain the code and concepts to me, helping me learn and understand, instead of just focusing on a copy/paste approach.
 
 - brainstorm and prioritize features, helping me to time-block and plan.
-- perform backend code reviews, suggesting types for the Event class, according to market best practices. I'd also never done an in-memory repository, so I used AI to help me understand the structure of how that would go.
-- perform front-end code refactoring, speed up CSS tweaks, generate labels for translated items. I wasn't at all familiar with optimistic updates, and not too clear on memoization, so Chat helped me navigate through implementing these concepts and/or understanding and determining when they were called for.
-- debug - ("Chat, what's wrong with my docker files?", "Chat, guide me through implementing internationalization", "Chat, why am I geting x error when trying to run my tests?").
+- perform backend code reviews, suggesting types for the Event class (specifically the id and price attributes), according to market best practices. I'd also never done an in-memory repository, so I used AI to help me understand the structure of how that would go.
+- perform front-end code refactoring, speed up, support, and suggest CSS tweaks, generate labels for translated items. I wasn't at all familiar with optimistic updates, and not too clear on memoization, so Chat helped me navigate through implementing these concepts and/or understanding and determining when they were called for. I'd also never done internationalization, so AI guided me through implementing that. 
+- debug - ("Chat, what's wrong with my docker files?", "Chat, guide me through implementing internationalization", "Chat, why am I geting x error when trying to run my tests?")
+- suggesting refactors and general code review.
 - make the README clearer and fix gramatical errors, as well as making the text more fluid.
 
 All final decisions were made by me, with AI suggestions being carefully reviewed and altered when necessary.
@@ -180,13 +181,13 @@ All final decisions were made by me, with AI suggestions being carefully reviewe
 ## Tests
 Simple backend and frontend tests were implemented. I chose to focus on the business rules, making sure the backend service validations and frontend form validations were working as expected. I did not have time to code component tests, so I focused on testing them through the actual interface instead, throughout the development process. If I had more time, I would use React Testing Library and Playwright to write component tests and validate expected workflow. The rules tested were:
 
-- Price cannot equal to or less than zero
-- End date cannot be before start date
-- No null or empty fields
+- Price cannot equal to or less than zero.
+- End date cannot be before start date.
+- No null or empty fields.
 - No invalid statuses.
 - One generic happy path.
-- Edit flow (backend only)
-- Delete flow (backend only)
-- Empty GET (backend only)
+- Edit flow (backend only).
+- Delete flow (backend only).
+- Empty GET (backend only).
 
 For backend testing, Mockito and JUnit were used. For frontend testing, Vitest was used.
