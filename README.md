@@ -173,8 +173,8 @@ To summarize the state flow:
 
   
 
-## AI Usage (WIP)
-I use a lot of AI during my workday as a developer, and the same was done during the coding of this challenge. ChatGPT was used from start to finish, in order to speed along development. When using AI to work through new/unclear/unknown concepts, I focus on using AI to correctly implement such concepts, but always focusing on also having AI explain the code and features to me, instead of just focusing on a copy/paste approach.
+## AI Usage
+I use a lot of AI during my workday as a developer, and the same was done during the coding of this challenge. ChatGPT was used from start to finish, in order to speed along development. When using AI to work through new/unclear/unknown concepts, I focus on using AI to correctly implement such concepts, but always focusing on also having AI explain the code and concepts to me, helping me learn and understand, instead of just focusing on a copy/paste approach.
 
 - brainstorm and prioritize features, helping me to time-block and plan.
 - perform backend code reviews, suggesting types for the Event class, according to market best practices. I'd also never done an in-memory repository, so I used AI to help me understand the structure of how that would go.
