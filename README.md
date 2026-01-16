@@ -100,12 +100,6 @@ The use of translation files to define labels per language makes it straightforw
 
 ---
 
-### Vitest
-
-Vitest was chosen as the testing framework for the frontend due to its fast execution and simplicity.
-
----
-
 ### Font Awesome
 
 Font Awesome was used to provide clear and consistent icons throughout the interface, keeping a clean and intuitive interface.
@@ -187,3 +181,9 @@ Simple backend and frontend tests were implemented. I chose to focus on the busi
 - End date cannot be before start date
 - No null or empty fields
 - No invalid statuses.
+- One generic happy path.
+- Edit flow (backend only)
+- Delete flow (backend only)
+- Empty GET (backend only)
+
+  For backend testing, Mockito and JUnit were used. For frontend testing, Vitest was used.
